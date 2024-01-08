@@ -1,0 +1,90 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<heading>
+  <div>
+    <button
+      transition:persist
+      transition:name="open-drawer-button"
+      type="button"
+      id="open-drawer-button">open</button
+    >
+    <h1 transition:name="title">{title}</h1>
+  </div>
+
+  <nav
+    id="drawer"
+    data-is-open="false"
+    transition:name="drawer"
+    transition:persist
+  >
+    <div>
+      <button type="button" id="close-drawer-button">close</button>
+    </div>
+
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="/tickets">Tickets</a></li>
+      <li><a href="/rules">Rules</a></li>
+      <li><a href="/photos">Photo's</a></li>
+    </ul>
+
+    <div></div>
+  </nav>
+</heading>
+
+<script>
+  let isOpen = false;
+  const drawer = document.getElementById("drawer")!;
+  drawer.dataset.isOpen = isOpen.toString();
+
+  function toggleDrawer() {
+    isOpen = !isOpen;
+    drawer.dataset.isOpen = isOpen.toString();
+  }
+
+  function registerEventHandlers() {
+    const internalLinks = document.querySelectorAll("a");
+    internalLinks.forEach((l) => l.addEventListener("click", toggleDrawer));
+
+    document
+      .getElementById("open-drawer-button")!
+      .addEventListener("click", toggleDrawer);
+
+    document
+      .getElementById("close-drawer-button")!
+      .addEventListener("click", toggleDrawer);
+  }
+
+  registerEventHandlers();
+</script>
+
+<style>
+  nav {
+    background-color: tomato;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    height: 100vh;
+    width: 275px;
+
+    transition: left 0.25s ease-out;
+
+    z-index: 99;
+  }
+
+  nav[data-is-open="false"] {
+    left: -275px;
+  }
+
+  nav ul li a {
+    font-size: 3rem;
+  }
+</style>
